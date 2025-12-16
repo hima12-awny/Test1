@@ -6,6 +6,11 @@ import { AudienceToggle } from './components/AudienceToggle';
 import { ScrollIndicator } from './components/ScrollIndicator';
 import { FeatureCarousel } from './components/FeatureCarousel';
 import { PremiumCTA } from './components/PremiumCTA';
+import { TestimonialCard } from './components/TestimonialCard';
+import { PricingCard } from './components/PricingCard';
+import { FAQItem } from './components/FAQItem';
+import { StatCard } from './components/StatCard';
+import { UseCaseCard } from './components/UseCaseCard';
 
 export default function Home() {
   // Generate stable random values per component instance
@@ -43,6 +48,12 @@ export default function Home() {
         <div className="hidden md:flex gap-8 text-sm font-light">
           <a href="#features" className="hover:text-[#2B9A9A] transition-colors">
             Features
+          </a>
+          <a href="#pricing" className="hover:text-[#2B9A9A] transition-colors">
+            Pricing
+          </a>
+          <a href="#faq" className="hover:text-[#2B9A9A] transition-colors">
+            FAQ
           </a>
           <a href="#contact" className="hover:text-[#2B9A9A] transition-colors">
             Contact
@@ -275,7 +286,272 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 7: Premium CTA */}
+      {/* Section 7: Real Impact (Testimonials) */}
+      <section className="relative min-h-screen py-24 px-4 md:px-12 flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16 text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Educators and students speak.
+          </motion.h2>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                quote: 'I can now identify struggling students within days instead of weeks. It changed how I teach.',
+                author: 'Sarah Chen',
+                role: 'High School Math Teacher',
+                icon: '💡',
+              },
+              {
+                quote: 'Learning at my own pace finally made sense. I actually understand what we&rsquo;re studying.',
+                author: 'Marcus',
+                role: 'Grade 9 Student',
+                icon: '🚀',
+              },
+              {
+                quote: 'Azka gave us visibility into our entire school&rsquo;s learning outcomes. Unprecedented.',
+                author: 'Dr. Patel',
+                role: 'School Principal',
+                icon: '🎯',
+              },
+              {
+                quote: 'My daughter&rsquo;s confidence in STEM skyrocketed. The personalized approach works.',
+                author: 'James W.',
+                role: 'Parent',
+                icon: '⭐',
+              },
+            ].map((testimonial, idx) => (
+              <TestimonialCard
+                key={idx}
+                quote={testimonial.quote}
+                author={testimonial.author}
+                role={testimonial.role}
+                icon={testimonial.icon}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 8: Use Cases */}
+      <section className="relative min-h-screen py-24 px-4 md:px-12 flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16 text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Works for any learning context.
+          </motion.h2>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                icon: '🏫',
+                title: 'Traditional Schools',
+                description: 'Enhance classroom learning with adaptive personalization.',
+                benefits: ['Differentiated instruction', 'Real-time progress tracking', 'Teacher guidance'],
+              },
+              {
+                icon: '💻',
+                title: 'Online Learning',
+                description: 'Scale personalized education across digital platforms.',
+                benefits: ['Scalable infrastructure', 'Self-paced modules', 'Community insights'],
+              },
+              {
+                icon: '🌍',
+                title: 'Hybrid Programs',
+                description: 'Seamlessly blend in-person and remote instruction.',
+                benefits: ['Consistent experience', 'Flexible scheduling', 'Unified analytics'],
+              },
+              {
+                icon: '🚀',
+                title: 'Educational Tech',
+                description: 'Integrate Azka into existing EdTech ecosystems.',
+                benefits: ['API integration', 'LMS compatibility', 'Data portability'],
+              },
+            ].map((useCase, idx) => (
+              <UseCaseCard
+                key={idx}
+                icon={useCase.icon}
+                title={useCase.title}
+                description={useCase.description}
+                benefits={useCase.benefits}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 9: Detailed Impact */}
+      <section id="impact" className="relative min-h-screen py-24 px-4 md:px-12 flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16 text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Measurable impact. Real results.
+          </motion.h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                value: '3.2x',
+                label: 'Faster Issue Detection',
+                description: 'Identify learning gaps before they become problems.',
+                icon: '⚡',
+              },
+              {
+                value: '47%',
+                label: 'Less Grading Time',
+                description: 'Automate assessment workflows for teachers.',
+                icon: '⏱️',
+              },
+              {
+                value: '89%',
+                label: 'Student Engagement',
+                description: 'Boost completion rates with adaptive pathways.',
+                icon: '🎯',
+              },
+              {
+                value: '2.5',
+                label: 'Grade Improvement',
+                description: 'Average improvement in standardized scores.',
+                icon: '📈',
+              },
+              {
+                value: '100%',
+                label: 'Data Security',
+                description: 'GDPR-compliant, encrypted, role-based access.',
+                icon: '🔒',
+              },
+              {
+                value: '24/7',
+                label: 'Support Available',
+                description: 'Responsive support team for your success.',
+                icon: '🤝',
+              },
+            ].map((stat, idx) => (
+              <StatCard
+                key={idx}
+                value={stat.value}
+                label={stat.label}
+                description={stat.description}
+                icon={stat.icon}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 10: Pricing */}
+      <section id="pricing" className="relative min-h-screen py-24 px-4 md:px-12 flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-4 text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Transparent pricing.
+          </motion.h2>
+          <motion.p
+            className="text-center text-white/60 mb-16 font-light"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            Choose the plan that fits your needs. No hidden fees.
+          </motion.p>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              {
+                name: 'Starter',
+                description: 'For individual educators',
+                features: ['Up to 100 students', 'Basic analytics', 'Email support', 'Adaptive quizzes'],
+              },
+              {
+                name: 'Professional',
+                description: 'For schools and districts',
+                features: ['Unlimited students', 'Advanced analytics', 'Priority support', 'API access', 'Custom branding', 'SSO integration'],
+                highlighted: true,
+              },
+              {
+                name: 'Enterprise',
+                description: 'For large organizations',
+                features: ['Dedicated account manager', 'Custom integration', 'On-premises option', 'Advanced security', 'SLA guarantee', 'Training included'],
+              },
+            ].map((plan, idx) => (
+              <PricingCard
+                key={idx}
+                name={plan.name}
+                description={plan.description}
+                features={plan.features}
+                highlighted={plan.highlighted}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 11: FAQ */}
+      <section id="faq" className="relative min-h-screen py-24 px-4 md:px-12 flex items-center">
+        <div className="max-w-3xl mx-auto w-full">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16 text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Frequently asked questions.
+          </motion.h2>
+
+          <div className="space-y-4">
+            {[
+              {
+                question: 'How long does it take to see results?',
+                answer: 'Most educators see significant insights within the first 2-3 weeks. Students typically report noticeable personalization within the first 10-15 learning sessions. Full impact is usually visible after one semester.',
+              },
+              {
+                question: 'Is student data secure and private?',
+                answer: 'Yes. We use enterprise-grade encryption, comply with GDPR and FERPA, and implement strict role-based access controls. Student data is never sold or shared with third parties. We conduct regular security audits.',
+              },
+              {
+                question: 'Can we integrate Azka with our existing systems?',
+                answer: 'Absolutely. We support LMS integration (Canvas, Blackboard, Moodle), single sign-on (SSO), and REST APIs for custom integrations. Our technical team can help with implementation.',
+              },
+              {
+                question: 'What training do teachers need?',
+                answer: 'Minimal. We provide in-app guidance, video tutorials, and optional live onboarding sessions. Most teachers are productive within a few hours. Advanced training is available for power users.',
+              },
+              {
+                question: 'How much does it cost?',
+                answer: 'Pricing starts at a low per-teacher cost for individual educators and scales based on district size. We offer flexible billing (per-student or per-teacher) and volume discounts. Contact us for a custom quote.',
+              },
+              {
+                question: 'Do you offer a free trial?',
+                answer: 'Yes! We offer a 30-day free trial for qualified schools and educators. No credit card required. You get access to all Professional features during the trial.',
+              },
+            ].map((faq, idx) => (
+              <FAQItem key={idx} question={faq.question} answer={faq.answer} index={idx} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 12: Premium CTA */}
       <section className="relative">
         <PremiumCTA />
       </section>
