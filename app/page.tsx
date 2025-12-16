@@ -1,257 +1,397 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { AnimatedFeatureCard } from './components/AnimatedFeatureCard';
+import { MotionButton } from './components/MotionButton';
+import { Section } from './components/Section';
+
+const Hero3D = dynamic(() => import('./components/Hero3D').then((mod) => ({ default: mod.Hero3D })), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-96 bg-gradient-to-br from-[#2B9A9A]/10 to-blue-100/30 rounded-2xl animate-pulse" />
+  ),
+});
 
 export default function Home() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const features = [
     {
       title: 'Adaptive Quizzes',
-      description: 'Question difficulty adjusts in real time based on student answers.'
+      description: 'Question difficulty adjusts in real time based on student answers.',
+      icon: '📊',
     },
     {
       title: 'Smart Reports',
-      description: 'Visual dashboards show knowledge gaps, engagement trends, and at-risk students.'
+      description: 'Visual dashboards show knowledge gaps, engagement trends, and at-risk students.',
+      icon: '📈',
     },
     {
       title: 'Cheating Detection',
-      description: 'Automated detectors flag suspicious behavior during assessments.'
+      description: 'Automated detectors flag suspicious behavior during assessments.',
+      icon: '🛡️',
     },
     {
       title: 'Content Generation',
-      description: 'Teachers can auto-generate summaries, lesson outlines, and extra practice.'
+      description: 'Teachers can auto-generate summaries, lesson outlines, and extra practice.',
+      icon: '✍️',
     },
     {
       title: 'Integration Ready',
-      description: 'Works with existing LMS, single-sign-on, and school databases.'
+      description: 'Works with existing LMS, single-sign-on, and school databases.',
+      icon: '🔗',
     },
     {
       title: 'Secure & Scalable',
-      description: 'Role-based access, encrypted data storage, GDPR-like privacy controls.'
-    }
+      description: 'Role-based access, encrypted data storage, GDPR-like privacy controls.',
+      icon: '🔐',
+    },
   ];
 
   const testimonials = [
     {
       quote: 'Azka cut grading time in half and made it clear which students needed help.',
       author: 'Ms. Fatma',
-      role: 'Primary School Teacher'
+      role: 'Primary School Teacher',
     },
     {
       quote: 'My son improved his math score by two levels in one semester.',
       author: 'Parent',
-      role: ''
-    }
+      role: '',
+    },
   ];
 
   const faqs = [
     {
       question: 'Is student data secure?',
-      answer: 'Yes — role-based access, encrypted storage, and export controls ensure your data is protected.'
+      answer: 'Yes — role-based access, encrypted storage, and export controls ensure your data is protected.',
     },
     {
       question: 'Can we integrate with our existing system?',
-      answer: 'Yes — Azka supports APIs and common LMS integrations; custom work is available for enterprise clients.'
+      answer: 'Yes — Azka supports APIs and common LMS integrations; custom work is available for enterprise clients.',
     },
     {
       question: 'Do teachers need training?',
-      answer: 'Minimal — in-app guides and onboarding webinars are included. Optional professional training packages are available.'
-    }
+      answer: 'Minimal — in-app guides and onboarding webinars are included. Optional professional training packages are available.',
+    },
   ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <motion.nav
+        className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold text-[#2B9A9A]">Azka</div>
+            <motion.div className="text-2xl font-bold text-[#2B9A9A]" whileHover={{ scale: 1.05 }}>
+              Azka
+            </motion.div>
+
+            {/* Desktop Menu */}
             <ul className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
-              <li><a href="#how-it-works" className="hover:text-[#2B9A9A] transition-colors">How it Works</a></li>
-              <li><a href="#features" className="hover:text-[#2B9A9A] transition-colors">Features</a></li>
-              <li><a href="#pricing" className="hover:text-[#2B9A9A] transition-colors">Pricing</a></li>
-              <li><a href="#faq" className="hover:text-[#2B9A9A] transition-colors">FAQ</a></li>
-              <li><a href="#contact" className="hover:text-[#2B9A9A] transition-colors">Contact</a></li>
+              {['How it Works', 'Features', 'Pricing', 'FAQ', 'Contact'].map((item, idx) => (
+                <motion.li key={idx} whileHover={{ color: '#2B9A9A' }}>
+                  <a href={`#${item.toLowerCase().replace(' ', '-')}`} className="transition-colors">
+                    {item}
+                  </a>
+                </motion.li>
+              ))}
             </ul>
-            <button className="hidden md:block px-6 py-2 rounded-lg bg-[#2B9A9A] text-white font-medium hover:bg-[#218282] transition-colors">
+
+            <MotionButton variant="primary" className="hidden md:block">
               Get a Demo
+            </MotionButton>
+
+            {/* Mobile Menu Button */}
+            <button className="md:hidden p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
             </button>
           </div>
+
+          {/* Mobile Menu */}
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: isMobileMenuOpen ? 1 : 0, height: isMobileMenuOpen ? 'auto' : 0 }}
+            className="md:hidden overflow-hidden mt-4 border-t border-gray-200 pt-4"
+          >
+            <ul className="space-y-3 text-sm font-medium text-gray-700">
+              {['How it Works', 'Features', 'Pricing', 'FAQ', 'Contact'].map((item, idx) => (
+                <li key={idx}>
+                  <a href={`#${item.toLowerCase().replace(' ', '-')}`} className="hover:text-[#2B9A9A] transition-colors">
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
-      <section className="py-16 md:py-24 px-4 bg-gradient-to-br from-white via-white to-blue-50">
+      <motion.section className="py-16 md:py-24 px-4 bg-gradient-to-br from-white via-white to-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
+            <motion.div
+              className="space-y-8"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div className="space-y-4" variants={itemVariants}>
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900">
                   Learn smarter. Teach easier. Grow faster.
                 </h1>
                 <p className="text-xl text-gray-600 leading-relaxed">
                   Azka uses AI to personalize lessons, detect learning gaps, and simplify school management — so teachers teach and students succeed.
                 </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-3 rounded-lg bg-[#2B9A9A] text-white font-semibold hover:bg-[#218282] transition-colors shadow-lg hover:shadow-xl">
-                  Get a Demo
-                </button>
-                <button className="px-8 py-3 rounded-lg border-2 border-[#2B9A9A] text-[#2B9A9A] font-semibold hover:bg-blue-50 transition-colors">
-                  Explore Features
-                </button>
-              </div>
-              <p className="text-sm text-gray-500">
+              </motion.div>
+              <motion.div className="flex flex-col sm:flex-row gap-4" variants={itemVariants}>
+                <MotionButton variant="primary">Get a Demo</MotionButton>
+                <MotionButton variant="secondary">Explore Features</MotionButton>
+              </motion.div>
+              <motion.p className="text-sm text-gray-500" variants={itemVariants}>
                 Free demo • No credit card • 14-day trial
-              </p>
-            </div>
-            <div className="bg-gradient-to-br from-[#2B9A9A]/10 to-blue-100/30 rounded-2xl p-8 aspect-square flex items-center justify-center">
-              <div className="text-center text-gray-600">
-                <div className="text-6xl mb-4">📊</div>
-                <p className="text-lg font-semibold">Dashboard Preview</p>
-                <p className="text-sm mt-2">Interactive analytics & student insights</p>
-              </div>
-            </div>
+              </motion.p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <Hero3D />
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Three Key Benefits */}
-      <section className="py-16 px-4 bg-white">
+      <Section variant="light">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-lg bg-[#2B9A9A]/10 flex items-center justify-center text-2xl">
-                🎯
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Personalized Learning</h3>
-              <p className="text-gray-600">
-                Adaptive quizzes and content that fit each student&apos;s level, ensuring everyone progresses at their own pace.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-lg bg-[#2B9A9A]/10 flex items-center justify-center text-2xl">
-                ⚡
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Teacher-first Tools</h3>
-              <p className="text-gray-600">
-                Auto-summaries, cheating detection, and gap reports so teachers spend time teaching, not grading.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-lg bg-[#2B9A9A]/10 flex items-center justify-center text-2xl">
-                🏫
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">School-ready Management</h3>
-              <p className="text-gray-600">
-                Attendance, batch/section management, and reporting integrated with learning data.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-16 px-4 bg-blue-50/50">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">How It Works</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <motion.div
+            className="grid md:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {[
               {
-                step: 1,
-                title: 'Onboard & Assess',
-                description: 'Import classes or invite students — start with a baseline assessment.'
+                icon: '🎯',
+                title: 'Personalized Learning',
+                desc: "Adaptive quizzes and content that fit each student's level, ensuring everyone progresses at their own pace.",
               },
               {
-                step: 2,
-                title: 'Personalize & Assign',
-                description: 'Azka creates adaptive learning paths and recommended activities.'
+                icon: '⚡',
+                title: 'Teacher-first Tools',
+                desc: 'Auto-summaries, cheating detection, and gap reports so teachers spend time teaching, not grading.',
               },
               {
-                step: 3,
-                title: 'Track & Intervene',
-                description: 'Teachers get automated gap reports and suggested interventions.'
-              }
-            ].map((item) => (
-              <div key={item.step} className="space-y-4 text-center">
-                <div className="w-16 h-16 rounded-full bg-[#2B9A9A] text-white font-bold text-2xl flex items-center justify-center mx-auto shadow-lg">
-                  {item.step}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
-              </div>
+                icon: '🏫',
+                title: 'School-ready Management',
+                desc: 'Attendance, batch/section management, and reporting integrated with learning data.',
+              },
+            ].map((benefit, idx) => (
+              <motion.div key={idx} className="space-y-4" variants={itemVariants}>
+                <motion.div
+                  className="w-12 h-12 rounded-lg bg-[#2B9A9A]/10 flex items-center justify-center text-2xl"
+                  whileHover={{ scale: 1.1, backgroundColor: '#2B9A9A' }}
+                >
+                  {benefit.icon}
+                </motion.div>
+                <h3 className="text-xl font-bold text-gray-900">{benefit.title}</h3>
+                <p className="text-gray-600">{benefit.desc}</p>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </Section>
+
+      {/* How It Works */}
+      <Section id="how-it-works" variant="gradient">
+        <div className="max-w-7xl mx-auto">
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            How It Works
+          </motion.h2>
+          <motion.div
+            className="grid md:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {[
+              { step: 1, title: 'Onboard & Assess', desc: 'Import classes or invite students — start with a baseline assessment.' },
+              { step: 2, title: 'Personalize & Assign', desc: 'Azka creates adaptive learning paths and recommended activities.' },
+              { step: 3, title: 'Track & Intervene', desc: 'Teachers get automated gap reports and suggested interventions.' },
+            ].map((item) => (
+              <motion.div
+                key={item.step}
+                className="space-y-4 text-center"
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+              >
+                <motion.div
+                  className="w-16 h-16 rounded-full bg-[#2B9A9A] text-white font-bold text-2xl flex items-center justify-center mx-auto shadow-lg"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  {item.step}
+                </motion.div>
+                <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
+                <p className="text-gray-600">{item.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </Section>
 
       {/* Features */}
-      <section id="features" className="py-16 px-4 bg-white">
+      <Section id="features" variant="light">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">Powerful Features</h2>
-          <p className="text-center text-gray-600 mb-16 max-w-2xl mx-auto">
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Powerful Features
+          </motion.h2>
+          <motion.p
+            className="text-center text-gray-600 mb-16 max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
             Everything you need to deliver personalized learning at scale
-          </p>
+          </motion.p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="p-6 rounded-xl border border-gray-200 hover:border-[#2B9A9A] hover:shadow-lg transition-all">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
+              <AnimatedFeatureCard key={index} {...feature} index={index} />
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Testimonials */}
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-white">
+      <Section variant="gradient">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">Loved by Educators</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Loved by Educators
+          </motion.h2>
+          <motion.div
+            className="grid md:grid-cols-2 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
-                <p className="text-gray-700 mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
+              <motion.div
+                key={index}
+                className="bg-white p-8 rounded-xl shadow-md border border-gray-100"
+                variants={itemVariants}
+                whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
+              >
+                <p className="text-gray-700 mb-6 italic">
+                  &ldquo;{testimonial.quote}&rdquo;
+                </p>
                 <div>
                   <p className="font-semibold text-gray-900">— {testimonial.author}</p>
                   {testimonial.role && <p className="text-sm text-gray-600">{testimonial.role}</p>}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </Section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-16 px-4 bg-white">
+      <Section id="pricing" variant="light">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">Simple Pricing</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Simple Pricing
+          </motion.h2>
+          <motion.div
+            className="grid md:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {[
               {
                 name: 'Starter',
                 description: 'For single teachers',
-                features: ['Baseline adaptive quizzes', 'Class analytics', 'Free or low-cost']
+                features: ['Baseline adaptive quizzes', 'Class analytics', 'Free or low-cost'],
               },
               {
                 name: 'School',
                 description: 'Full school suite',
                 features: ['Full teacher & admin suite', 'Integrations', 'Attendance & reporting'],
-                highlighted: true
+                highlighted: true,
               },
               {
                 name: 'Enterprise',
                 description: 'Custom solutions',
-                features: ['Custom integrations', 'Advanced analytics', 'On-prem option', 'SLAs']
-              }
+                features: ['Custom integrations', 'Advanced analytics', 'On-prem option', 'SLAs'],
+              },
             ].map((tier, index) => (
-              <div
+              <motion.div
                 key={index}
                 className={`rounded-xl p-8 border transition-all ${
                   tier.highlighted
-                    ? 'border-[#2B9A9A] bg-gradient-to-br from-[#2B9A9A]/5 to-white shadow-xl scale-105'
-                    : 'border-gray-200 hover:border-[#2B9A9A] hover:shadow-lg'
+                    ? 'border-[#2B9A9A] bg-gradient-to-br from-[#2B9A9A]/5 to-white shadow-xl'
+                    : 'border-gray-200'
                 }`}
+                variants={itemVariants}
+                whileHover={{
+                  y: -8,
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                }}
+                style={tier.highlighted ? { scale: 1.05 } : {}}
               >
                 {tier.highlighted && (
                   <div className="text-sm font-semibold text-[#2B9A9A] mb-4">Most Popular</div>
@@ -266,102 +406,186 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  className={`w-full py-3 rounded-lg font-semibold transition-colors ${
-                    tier.highlighted
-                      ? 'bg-[#2B9A9A] text-white hover:bg-[#218282]'
-                      : 'border-2 border-[#2B9A9A] text-[#2B9A9A] hover:bg-blue-50'
-                  }`}
+                <MotionButton
+                  variant={tier.highlighted ? 'primary' : 'secondary'}
+                  className="w-full text-center block"
                 >
                   Get Started
-                </button>
-              </div>
+                </MotionButton>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </Section>
 
       {/* FAQ */}
-      <section id="faq" className="py-16 px-4 bg-blue-50/50">
+      <Section id="faq" variant="gradient">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">Frequently Asked Questions</h2>
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Frequently Asked Questions
+          </motion.h2>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+              <motion.div
+                key={index}
+                className="border border-gray-200 rounded-lg overflow-hidden bg-white"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+              >
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full p-6 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors text-left"
+                  className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-[#2B9A9A] focus:ring-offset-2"
+                  aria-expanded={expandedFaq === index}
+                  aria-controls={`faq-answer-${index}`}
                 >
                   <span className="font-semibold text-gray-900">{faq.question}</span>
-                  <span className="text-[#2B9A9A] text-xl font-bold">
-                    {expandedFaq === index ? '−' : '+'}
-                  </span>
+                  <motion.span
+                    className="text-[#2B9A9A] text-xl font-bold"
+                    animate={{ rotate: expandedFaq === index ? 45 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    +
+                  </motion.span>
                 </button>
-                {expandedFaq === index && (
+                <motion.div
+                  id={`faq-answer-${index}`}
+                  initial={false}
+                  animate={{ height: expandedFaq === index ? 'auto' : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
                   <div className="p-6 bg-gray-50 border-t border-gray-200 text-gray-700">
                     {faq.answer}
                   </div>
-                )}
-              </div>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-[#2B9A9A] to-teal-700 text-white">
+      <motion.section
+        className="py-16 px-4 bg-gradient-to-r from-[#2B9A9A] to-teal-700 text-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-3xl md:text-4xl font-bold">Ready to transform your school?</h2>
-          <p className="text-lg text-teal-100">
+          <motion.h2 className="text-3xl md:text-4xl font-bold">
+            Ready to transform your school?
+          </motion.h2>
+          <motion.p className="text-lg text-teal-100">
             See how Azka helps teachers teach better and students learn faster.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 rounded-lg bg-white text-[#2B9A9A] font-semibold hover:bg-gray-100 transition-colors shadow-lg">
-              Get a Demo
-            </button>
-            <button className="px-8 py-3 rounded-lg border-2 border-white text-white font-semibold hover:bg-white/10 transition-colors">
-              Start Free Trial
-            </button>
-          </div>
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div variants={itemVariants}>
+              <MotionButton variant="primary" className="bg-white text-[#2B9A9A] hover:bg-gray-100">
+                Get a Demo
+              </MotionButton>
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <MotionButton variant="ghost" className="border-2 border-white text-white hover:bg-white/10">
+                Start Free Trial
+              </MotionButton>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer id="contact" className="bg-gray-900 text-gray-300 py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div>
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
               <h4 className="text-white font-bold mb-4">Azka</h4>
               <p className="text-sm">Personalized AI-powered learning for schools.</p>
-            </div>
-            <div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              viewport={{ once: true }}
+            >
               <h4 className="text-white font-bold mb-4">Product</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a></li>
+                <li>
+                  <a href="#features" className="hover:text-white transition-colors">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#pricing" className="hover:text-white transition-colors">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#how-it-works" className="hover:text-white transition-colors">
+                    How it Works
+                  </a>
+                </li>
               </ul>
-            </div>
-            <div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               <h4 className="text-white font-bold mb-4">Company</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Careers
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Contact
+                  </a>
+                </li>
               </ul>
-            </div>
-            <div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              viewport={{ once: true }}
+            >
               <h4 className="text-white font-bold mb-4">Contact</h4>
               <p className="text-sm mb-2">contact@azkaedu.com</p>
               <p className="text-sm">+20 1X XXX XXXX</p>
-            </div>
+            </motion.div>
           </div>
           <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row items-center justify-between">
             <p className="text-sm">© 2024 Azka. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="#" className="hover:text-white transition-colors">Accessibility</a>
+              <a href="#" className="hover:text-white transition-colors">
+                Privacy
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Terms
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Accessibility
+              </a>
             </div>
           </div>
         </div>
